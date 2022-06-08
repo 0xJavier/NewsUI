@@ -8,9 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State private var articles = [News]()
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        NavigationView {
+            ScrollView {
+                LazyVStack {
+                    ForEach(articles) { article in
+                        NewsCardView(news: article)
+                    }
+                }
+            }
+            .navigationTitle("NewsUI")
+        }
+        .task {
+            articles = await NetworkManager.retrieveTrendingNews()
+        }
     }
 }
 
